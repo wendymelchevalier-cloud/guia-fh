@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <!-- #region METADADOS PRINCIPAIS -->
+
+    <meta charset="UTF-8">
+
+    <script>
+        (() => {
+
+            try {
+
+                const raw =
+                    sessionStorage.getItem(
+                        "fh-page-transition"
+                    );
+
+
+                if (!raw) {
+                    return;
+                }
+
+
+                const data =
+                    JSON.parse(raw);
+
+
+                if (
+                    !data ||
+                    !data.target ||
+                    !data.createdAt
+                ) {
+                    return;
+                }
+
+
+                const age =
+                    Date.now() -
+                    data.createdAt;
+
+
+                if (
+                    age > 15000
+                ) {
+                    return;
+                }
+
+
+                const target =
+                    new URL(
+                        data.target,
+                        window.location.href
+                    );
+
+
+                if (
+                    target.origin ===
+                        window.location.origin &&
+
+                    target.pathname ===
+                        window.location.pathname &&
+
+                    target.search ===
+                        window.location.search
+                ) {
+
+                    document.documentElement
+                        .classList.add(
+                            "transition-handoff-pending"
+                        );
+
+                }
+
+            } catch (error) {
+
+                /*
+                Se sessionStorage estiver indisponível,
+                simplesmente seguimos normalmente.
+                */
+
+            }
+
+        })();
+    </script>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
+    <title>Guia do Herói | Guia FH</title>
+
+    <!-- #endregion -->
+
+
+    <!-- #region FAVICON E PWA -->
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="../assets/favicon.png"
+    >
+
+    <link
+        rel="manifest"
+        href="../manifest.webmanifest"
+    >
+
+    <meta
+        name="theme-color"
+        content="#000000"
+    >
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="black"
+    >
+
+    <meta
+        name="apple-mobile-web-app-title"
+        content="Guia FH"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="../assets/icon-192.png"
+    >
+
+    <!-- #endregion -->
+
+
+    <!-- #region ESTILOS -->
+
+    <link
+        rel="stylesheet"
+        href="../styles/fonts.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../styles/global.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../styles/guia-do-heroi.css"
+    >
+
+    <!-- #endregion -->
+
+
+    <!-- #region PRELOAD — TRANSIÇÃO -->
+
+    <link
+        rel="preload"
+        href="../assets/logo-intro-shield.webp"
+        as="image"
+        type="image/webp"
+        fetchpriority="high"
+    >
+
+    <link
+        rel="preload"
+        href="../assets/logo-intro-sword-a.webp"
+        as="image"
+        type="image/webp"
+        fetchpriority="high"
+    >
+
+    <link
+        rel="preload"
+        href="../assets/logo-intro-sword-b.webp"
+        as="image"
+        type="image/webp"
+        fetchpriority="high"
+    >
+
+    <!-- #endregion -->
+
+
+    <!-- #region PRELOAD — INTERFACE -->
+
+    <link
+        rel="preload"
+        href="../assets/placa-pages.webp"
+        as="image"
+        type="image/webp"
+    >
+
+    <link
+        rel="preload"
+        href="../assets/btn-fac-knights.webp"
+        as="image"
+        type="image/webp"
+    >
+
+    <link
+        rel="preload"
+        href="../assets/btn-fac-vikings.webp"
+        as="image"
+        type="image/webp"
+    >
+
+    <link
+        rel="preload"
+        href="../assets/btn-fac-samurai.webp"
+        as="image"
+        type="image/webp"
+    >
+
+    <link
+        rel="preload"
+        href="../assets/btn-fac-wulin.webp"
+        as="image"
+        type="image/webp"
+    >
+
+    <link
+        rel="preload"
+        href="../assets/btn-fac-outlanders.webp"
+        as="image"
+        type="image/webp"
+    >
+
+    <!-- #endregion -->
+
+</head>
+
+
+<body data-page="guia-do-heroi">
+
+    <main class="app content-reveal">
+
+
+        <!-- =====================================================
+             TRANSIÇÃO UNIVERSAL
+             ===================================================== -->
+
+        <!-- #region ESCUDO + ESPADAS -->
+
+        <div
+            class="page-transition"
+            aria-hidden="true"
+        >
+
+            <div class="transition-backdrop"></div>
+
+
+            <div class="transition-emblem">
+
+
+                <!-- Aura dourada -->
+
+                <div class="transition-aura"></div>
+
+
+                <!-- Espada esquerda -->
+
+                <img
+                    src="../assets/logo-intro-sword-a.webp"
+                    class="
+                        transition-sword
+                        transition-sword-a
+                    "
+                    alt=""
+                    aria-hidden="true"
+                >
+
+
+                <!-- Espada direita -->
+
+                <img
+                    src="../assets/logo-intro-sword-b.webp"
+                    class="
+                        transition-sword
+                        transition-sword-b
+                    "
+                    alt=""
+                    aria-hidden="true"
+                >
+
+
+                <!-- Escudo -->
+
+                <img
+                    src="../assets/logo-intro-shield.webp"
+                    class="transition-shield"
+                    alt=""
+                    aria-hidden="true"
+                    fetchpriority="high"
+                >
+
+            </div>
+
+        </div>
+
+        <!-- #endregion -->
+
+
+        <!-- =====================================================
+             PLACA PRINCIPAL
+             ===================================================== -->
+
+        <!-- #region PLACA -->
+
+        <div class="plate-wrap">
+
+            <img
+                src="../assets/placa-pages.webp"
+                class="plate-image"
+                alt=""
+                aria-hidden="true"
+            >
+
+
+            <!-- Reflexo metálico -->
+
+            <img
+                src="../assets/placa-pages.webp"
+                class="plate-shine"
+                alt=""
+                aria-hidden="true"
+            >
+
+
+            <h1 class="plate-title">
+                SELECIONE A FACÇÃO
+            </h1>
+
+
+            <div class="logo-credit">
+                By Glitch.exe &amp; WendyImBADatPvP
+            </div>
+
+        </div>
+
+        <!-- #endregion -->
+
+
+        <!-- =====================================================
+             MENU DAS FACÇÕES
+             ===================================================== -->
+
+        <!-- #region MENU DAS FACÇÕES -->
+
+        <nav
+            class="faction-menu"
+            aria-label="Facções de For Honor"
+        >
+
+
+            <!-- CAVALEIROS -->
+
+            <a
+                href="guia-do-heroi-facs/knights.html"
+                class="
+                    site-button
+                    faction-button
+                    page-link
+                    reveal-item
+                "
+            >
+
+                <img
+                    src="../assets/btn-fac-knights.webp"
+                    alt="Cavaleiros"
+                >
+
+                <span class="button-title">
+                    CAVALEIROS
+                </span>
+
+            </a>
+
+
+            <!-- VIKINGS -->
+
+            <a
+                href="guia-do-heroi-facs/vikings.html"
+                class="
+                    site-button
+                    faction-button
+                    page-link
+                    reveal-item
+                "
+            >
+
+                <img
+                    src="../assets/btn-fac-vikings.webp"
+                    alt="Vikings"
+                >
+
+                <span class="button-title">
+                    VIKINGS
+                </span>
+
+            </a>
+
+
+            <!-- SAMURAI -->
+
+            <a
+                href="guia-do-heroi-facs/samurai.html"
+                class="
+                    site-button
+                    faction-button
+                    page-link
+                    reveal-item
+                "
+            >
+
+                <img
+                    src="../assets/btn-fac-samurai.webp"
+                    alt="Samurai"
+                >
+
+                <span class="button-title">
+                    SAMURAI
+                </span>
+
+            </a>
+
+
+            <!-- WU LIN -->
+
+            <a
+                href="guia-do-heroi-facs/wu-lin.html"
+                class="
+                    site-button
+                    faction-button
+                    page-link
+                    reveal-item
+                "
+            >
+
+                <img
+                    src="../assets/btn-fac-wulin.webp"
+                    alt="Wu Lin"
+                >
+
+                <span class="button-title">
+                    WU LIN
+                </span>
+
+            </a>
+
+
+            <!-- FORASTEIROS -->
+
+            <a
+                href="guia-do-heroi-facs/outlanders.html"
+                class="
+                    site-button
+                    faction-button
+                    page-link
+                    reveal-item
+                "
+            >
+
+                <img
+                    src="../assets/btn-fac-outlanders.webp"
+                    alt="Forasteiros"
+                >
+
+                <span class="button-title">
+                    FORASTEIROS
+                </span>
+
+            </a>
+
+        </nav>
+
+        <!-- #endregion -->
+
+
+        <!-- =====================================================
+             VOLTAR AO INÍCIO
+             ===================================================== -->
+
+        <!-- #region VOLTAR AO INÍCIO -->
+
+        <div class="back-button-wrap reveal-item">
+
+            <a
+                href="../index.html"
+                class="
+                    action-button
+                    page-link
+                "
+            >
+                CLIQUE AQUI PARA VOLTAR AO INÍCIO
+            </a>
+
+        </div>
+
+        <!-- #endregion -->
+
+
+        <!-- =====================================================
+             RODAPÉ
+             ===================================================== -->
+
+        <!-- #region RODAPÉ -->
+
+        <footer class="footer-note">
+
+            Este é um site não oficial que eu fiz apenas para
+            praticar programação, ele foi criado
+            apenas para uso pessoal onde coloco minhas anotações pessoais
+            sobre For Honor, e compartilho elas com amigos.
+            Se você chegou aqui por acaso, apenas ignore.
+            For Honor e suas propriedades pertencem à Ubisoft.
+            Este site NÃO POSSUI vínculo oficial com a Ubisoft.
+            Para mais informações sobre For Honor,
+            consulte o For Honor Info Hub.
+
+            <br>
+
+            <a
+                href="https://forhonorinfohub.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                CLIQUE AQUI PARA IR AO FOR HONOR INFO HUB
+            </a>
+
+        </footer>
+
+        <!-- #endregion -->
+
+
+    </main>
+
+
+    <!-- =====================================================
+         JAVASCRIPT GLOBAL
+         ===================================================== -->
+
+    <script
+        src="../scripts/global.js"
+        defer
+    ></script>
+
+</body>
+
+</html>

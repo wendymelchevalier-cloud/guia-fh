@@ -1,0 +1,802 @@
+/* =========================================================
+   GUIA DO FOR HONOR
+   INDEX.CSS
+
+   Responsabilidades deste arquivo:
+   - Tela preta inicial da index
+   - Créditos da abertura
+   - Layout da placa da index
+   - Layout dos 6 botões
+   - Entrada da placa
+   - Aparição do rodapé
+   - Interações específicas da index
+
+   O sistema:
+   - escudo
+   - espadas
+   - aura dourada
+   - fade dos botões
+
+   pertence ao global.css.
+   ========================================================= */
+
+
+/* #region CONFIGURAÇÕES DA INTRO */
+
+:root {
+
+    /*
+       Fade dos créditos.
+
+       O tempo em que o texto permanece
+       totalmente visível é controlado
+       pelo global.js.
+    */
+    --index-credit-fade-duration:
+        0.65s;
+
+
+    /*
+       Fade da tela preta revelando
+       o wallpaper.
+    */
+    --index-black-fade-duration:
+        0.85s;
+
+
+    /*
+       Entrada da placa.
+    */
+    --index-plate-entry-duration:
+        1.15s;
+
+    --index-plate-entry-easing:
+        cubic-bezier(
+            0.18,
+            0.82,
+            0.24,
+            1
+        );
+
+
+    /*
+       Fade do rodapé.
+    */
+    --index-footer-fade-duration:
+        0.8s;
+}
+
+/* #endregion */
+
+
+/* =========================================================
+   INTRO PRETA
+   ========================================================= */
+
+/* #region TELA PRETA */
+
+.intro {
+    position: fixed;
+
+    inset: 0;
+
+    width: 100vw;
+
+    height: 100vh;
+    height: 100dvh;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background:
+        #000;
+
+    opacity: 1;
+
+    visibility: visible;
+
+    z-index: 900;
+
+    overflow: hidden;
+
+    pointer-events: auto;
+
+    transition:
+        opacity
+        var(--index-black-fade-duration)
+        ease;
+
+    will-change:
+        opacity;
+}
+
+
+/*
+   Depois das pulsações do brasão,
+   o fundo preto desaparece.
+
+   Escudo e espadas continuam acima
+   desta camada.
+*/
+
+.intro.is-revealing {
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+
+/*
+   Remove completamente a intro
+   depois do fade.
+*/
+
+.intro.is-finished {
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+}
+
+/* #endregion */
+
+
+/* #region CRÉDITOS */
+
+.intro-credit {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        scale(0.985);
+
+    width:
+        min(
+            90vw,
+            700px
+        );
+
+    padding:
+        12px
+        20px;
+
+    text-align:
+        center;
+
+    font-family:
+        var(
+            --font-body,
+            serif
+        );
+
+    font-size:
+        clamp(
+            15px,
+            4vw,
+            22px
+        );
+
+    font-weight:
+        400;
+
+    line-height:
+        1.3;
+
+    letter-spacing:
+        0.045em;
+
+    color:
+        rgba(
+            242,
+            215,
+            155,
+            0.96
+        );
+
+    text-shadow:
+        0 2px 4px
+        rgba(
+            0,
+            0,
+            0,
+            1
+        ),
+
+        0 0 12px
+        rgba(
+            255,
+            195,
+            90,
+            0.12
+        );
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity
+        var(--index-credit-fade-duration)
+        ease,
+
+        transform
+        var(--index-credit-fade-duration)
+        ease;
+
+    will-change:
+        opacity,
+        transform;
+}
+
+
+/* Fade in */
+
+.intro-credit.is-visible {
+    opacity: 1;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        scale(1);
+}
+
+
+/* Fade out */
+
+.intro-credit.is-fading-out {
+    opacity: 0;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        scale(1.015);
+}
+
+
+/* Remoção visual definitiva */
+
+.intro-credit.is-hidden {
+    opacity: 0;
+
+    visibility: hidden;
+}
+
+/* #endregion */
+
+
+/* =========================================================
+   PLACA
+   ========================================================= */
+
+/* #region PLACA — BASE */
+
+.plate-wrap {
+    position: absolute;
+
+    top: 5%;
+    left: 50%;
+
+    width:
+        min(
+            92vw,
+            800px
+        );
+
+    transform:
+        translateX(-50%);
+
+    /*
+       Começa fora da tela.
+    */
+    translate:
+        0
+        -115vh;
+
+    opacity: 0;
+
+    z-index: 5;
+
+    pointer-events: none;
+
+    transition:
+        translate
+        var(--index-plate-entry-duration)
+        var(--index-plate-entry-easing),
+
+        opacity
+        0.15s
+        ease;
+
+    will-change:
+        translate,
+        opacity;
+}
+
+
+/*
+   Entrada da placa.
+*/
+
+.plate-wrap.is-visible {
+    translate:
+        0
+        0;
+
+    opacity: 1;
+}
+
+/* #endregion */
+
+
+/* =========================================================
+   MENU PRINCIPAL
+   ========================================================= */
+
+/* #region MENU — BASE */
+
+/*
+   Os botões já ficam em suas posições finais.
+
+   A entrada visual é feita pelo sistema:
+
+   .content-reveal
+   .reveal-item
+
+   definido no global.css.
+*/
+
+.menu {
+    position: absolute;
+
+    top: 28%;
+    left: 5%;
+
+    width:
+        90%;
+
+    height:
+        53%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    grid-template-rows:
+        repeat(
+            3,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    column-gap:
+        5%;
+
+    row-gap:
+        1.5%;
+
+    z-index: 3;
+
+    /*
+       Durante a animação,
+       os botões ainda não podem ser clicados.
+    */
+    pointer-events: none;
+}
+
+
+/*
+   O fade, translate e scale da entrada
+   pertencem ao .reveal-item global.
+*/
+
+.menu-button {
+    min-width:
+        0;
+
+    min-height:
+        0;
+
+    pointer-events:
+        none;
+}
+
+
+/*
+   Depois que toda a animação termina,
+   o JavaScript adiciona .is-ready.
+*/
+
+.menu.is-ready {
+    pointer-events:
+        auto;
+}
+
+
+.menu.is-ready
+.menu-button {
+    pointer-events:
+        auto;
+}
+
+/* #endregion */
+
+
+/* =========================================================
+   INTERAÇÃO DOS BOTÕES
+   ========================================================= */
+
+/* #region HOVER — DESKTOP */
+
+/*
+   Hover sutil.
+
+   A aura dourada continua sendo
+   controlada pelo global.css.
+*/
+
+@media
+    (hover: hover)
+    and (pointer: fine) {
+
+    .menu.is-ready
+    .menu-button {
+        transition:
+            transform
+            0.18s
+            ease;
+    }
+
+
+    .menu.is-ready
+    .menu-button:hover {
+        transform:
+            translateY(-3px)
+            scale(1.025);
+    }
+
+
+    .menu.is-ready
+    .menu-button:active {
+        transform:
+            translateY(0)
+            scale(0.985);
+    }
+
+}
+
+/* #endregion */
+
+
+/* =========================================================
+   RODAPÉ
+   ========================================================= */
+
+/* #region RODAPÉ */
+
+/*
+   O rodapé fica invisível durante
+   toda a introdução.
+*/
+
+.footer-note {
+    opacity:
+        0;
+
+    pointer-events:
+        none;
+
+    transition:
+        opacity
+        var(--index-footer-fade-duration)
+        ease;
+}
+
+
+/*
+   Aparece quando a página está pronta.
+*/
+
+.footer-note.is-visible {
+    opacity:
+        1;
+
+    pointer-events:
+        auto;
+}
+
+/* #endregion */
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+/* #region MOBILE — RETRATO 9:19,5 */
+
+@media
+    (max-width: 1023px)
+    and (orientation: portrait) {
+
+    /*
+       Placa.
+    */
+
+    .plate-wrap {
+        top:
+            5%;
+
+        width:
+            min(
+                92vw,
+                800px
+            );
+    }
+
+
+    /*
+       Menu:
+
+       [ botão ] [ botão ]
+
+       [ botão ] [ botão ]
+
+       [ botão ] [ botão ]
+    */
+
+    .menu {
+        top:
+            28%;
+
+        left:
+            5%;
+
+        width:
+            90%;
+
+        height:
+            53%;
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(
+                    0,
+                    1fr
+                )
+            );
+
+        grid-template-rows:
+            repeat(
+                3,
+                minmax(
+                    0,
+                    1fr
+                )
+            );
+
+        column-gap:
+            5%;
+
+        row-gap:
+            1.5%;
+    }
+
+
+    /*
+       Créditos.
+    */
+
+    .intro-credit {
+        width:
+            92vw;
+
+        font-size:
+            clamp(
+                14px,
+                4.2vw,
+                20px
+            );
+    }
+
+}
+
+/* #endregion */
+
+
+/* =========================================================
+   DESKTOP
+   ========================================================= */
+
+/* #region DESKTOP — 16:9 */
+
+@media
+    (min-width: 1024px)
+    and (orientation: landscape) {
+
+    /* -------------------------
+       Créditos
+       ------------------------- */
+
+    .intro-credit {
+        width:
+            min(
+                80vw,
+                800px
+            );
+
+        font-size:
+            clamp(
+                16px,
+                1.25vw,
+                22px
+            );
+
+        letter-spacing:
+            0.06em;
+    }
+
+
+    /* -------------------------
+       Placa
+       ------------------------- */
+
+    .plate-wrap {
+        top:
+            4%;
+
+        width:
+            min(
+                32vw,
+                520px
+            );
+    }
+
+
+    /* -------------------------
+       Menu
+       ------------------------- */
+
+    .menu {
+        top:
+            50%;
+
+        left:
+            50%;
+
+        width:
+            min(
+                90vw,
+                1300px
+            );
+
+        height:
+            min(
+                31vh,
+                300px
+            );
+
+        transform:
+            translate(
+                -50%,
+                -50%
+            );
+
+        grid-template-columns:
+            repeat(
+                6,
+                minmax(
+                    0,
+                    1fr
+                )
+            );
+
+        grid-template-rows:
+            1fr;
+
+        column-gap:
+            1.5%;
+
+        row-gap:
+            0;
+    }
+
+
+    .menu-button img {
+        max-width:
+            min(
+                10vw,
+                165px
+            );
+
+        max-height:
+            72%;
+    }
+
+}
+
+/* #endregion */
+
+
+/* =========================================================
+   TELAS MAIS BAIXAS
+   ========================================================= */
+
+/* #region AJUSTE DE ALTURA */
+
+/*
+   Ajuste para notebooks ou desktops
+   com viewport mais baixa.
+*/
+
+@media
+    (min-width: 1024px)
+    and (orientation: landscape)
+    and (max-height: 700px) {
+
+    .plate-wrap {
+        top:
+            2.5%;
+    }
+
+
+    .menu {
+        top:
+            52%;
+
+        height:
+            min(
+                34vh,
+                250px
+            );
+    }
+
+}
+
+/* #endregion */
+
+
+/* =========================================================
+   REDUÇÃO DE MOVIMENTO
+   ========================================================= */
+
+/* #region ACESSIBILIDADE */
+
+@media
+    (prefers-reduced-motion: reduce) {
+
+    .intro,
+    .intro-credit,
+    .plate-wrap,
+    .footer-note {
+        transition-duration:
+            0.01ms !important;
+
+        transition-delay:
+            0ms !important;
+    }
+
+}
+
+/* #endregion */

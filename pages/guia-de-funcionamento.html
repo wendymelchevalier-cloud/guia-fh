@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <title>Em Desenvolvimento</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            min-height: 100dvh;
+            background: #000;
+            color: #fff;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+        }
+
+        .content {
+            width: min(90vw, 900px);
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            gap: 28px;
+        }
+
+        h1 {
+            font-size: clamp(28px, 6vw, 72px);
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+
+        .back-button {
+            width: min(84vw, 420px);
+            min-height: 56px;
+
+            padding: 14px 24px;
+
+            border: 2px solid #fff;
+            border-radius: 8px;
+
+            background: transparent;
+            color: #fff;
+
+            font-size: clamp(14px, 2.5vw, 18px);
+            font-weight: bold;
+            text-align: center;
+
+            cursor: pointer;
+        }
+
+        .back-button:active {
+            transform: scale(0.97);
+        }
+    </style>
+</head>
+
+<body>
+    <main class="content">
+        <h1>EM DESENVOLVIMENTO...</h1>
+
+        <button
+            class="back-button"
+            type="button"
+            onclick="voltarPagina()"
+        >
+            VOLTAR
+        </button>
+    </main>
+
+    <script>
+        function voltarPagina() {
+            if (window.history.length > 1) {
+                window.history.back();
+                return;
+            }
+
+            window.location.href = "../index.html";
+        }
+    </script>
+</body>
+</html>

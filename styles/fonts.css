@@ -1,0 +1,36 @@
+/* #region FONTES DO SITE */
+
+:root {
+    /* Título principal dos heróis */
+    --font-hero-title:
+        "Cinzel",
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    /* Subtítulo principal */
+    --font-subtitle-primary:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    /* Subtítulo secundário */
+    --font-subtitle-secondary:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    /* Textos padrões */
+    --font-body:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    /* Botões e interface */
+    --font-button:
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+/* #endregion */

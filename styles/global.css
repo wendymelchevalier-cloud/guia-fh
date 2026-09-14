@@ -1,0 +1,2160 @@
+/* =========================================================
+   GUIA DO FOR HONOR
+   GLOBAL.CSS
+
+   Responsabilidades deste arquivo:
+   - Reset e estrutura base
+   - Wallpaper
+   - Placas
+   - Botões
+   - Aura dos botões
+   - Rodapé
+   - Sistema universal de transição:
+       escudo
+       espadas
+       aura dourada
+       fundo preto opcional
+   - Helpers globais de entrada de conteúdo
+
+   NÃO colocar aqui:
+   - Créditos da intro da index
+   - Sequência exclusiva da index
+   - Posicionamento específico dos botões da index
+   ========================================================= */
+
+
+/* #region CONFIGURAÇÕES GLOBAIS */
+
+:root {
+
+    /* =====================================================
+       CORES
+       ===================================================== */
+
+    --color-black:
+        #000000;
+
+    --color-gold:
+        #f0d39a;
+
+    --color-gold-light:
+        #ffe6a6;
+
+    --color-gold-glow:
+        rgba(255, 174, 55, 0.72);
+
+    --color-gold-glow-soft:
+        rgba(255, 205, 100, 0.32);
+
+
+    /* =====================================================
+       TRANSIÇÃO UNIVERSAL
+       ===================================================== */
+
+    /*
+       Tamanho máximo do escudo.
+
+       Mobile recebe um valor próprio mais abaixo.
+       Desktop também possui override.
+    */
+    --transition-shield-size:
+        clamp(
+            230px,
+            62vw,
+            360px
+        );
+
+    /*
+       Comprimento das espadas em relação
+       ao tamanho do escudo.
+    */
+    --transition-sword-height:
+        calc(
+            var(--transition-shield-size)
+            * 1.72
+        );
+
+    /*
+       Inclinação final das espadas
+       quando formam o X.
+    */
+    --transition-sword-a-angle:
+        -43deg;
+
+    --transition-sword-b-angle:
+        43deg;
+
+
+    /* Entrada do escudo */
+
+    --transition-shield-in-duration:
+        0.78s;
+
+    --transition-shield-in-easing:
+        cubic-bezier(
+            0.18,
+            0.78,
+            0.22,
+            1
+        );
+
+
+    /* Entrada das espadas */
+
+    --transition-swords-in-duration:
+        0.82s;
+
+    --transition-swords-in-easing:
+        cubic-bezier(
+            0.16,
+            0.82,
+            0.24,
+            1
+        );
+
+
+    /* Saída do conjunto */
+
+    --transition-emblem-out-duration:
+        0.72s;
+
+    --transition-emblem-out-easing:
+        cubic-bezier(
+            0.55,
+            0,
+            0.75,
+            0.25
+        );
+
+
+    /* Aura do escudo */
+
+    --transition-aura-pulse-duration:
+        1.2s;
+
+
+    /* Fundo preto */
+
+    --transition-backdrop-duration:
+        0.9s;
+
+
+    /* =====================================================
+       CONTEÚDO DAS PÁGINAS
+       ===================================================== */
+
+    /*
+       Fade dos botões / ícones internos.
+    */
+    --content-reveal-duration:
+        0.65s;
+
+    --content-reveal-easing:
+        cubic-bezier(
+            0.22,
+            0.72,
+            0.28,
+            1
+        );
+
+
+    /*
+       Entrada da placa.
+    */
+    --secondary-entry-duration:
+        1.15s;
+
+    --plate-entry-easing:
+        cubic-bezier(
+            0.18,
+            0.82,
+            0.24,
+            1
+        );
+
+
+    /* =====================================================
+       AURA DOS BOTÕES
+       ===================================================== */
+
+    --button-aura-duration:
+        1.8s;
+
+    --button-aura-delay:
+        0s;
+
+
+    /* =====================================================
+       COMPATIBILIDADE TEMPORÁRIA
+       ===================================================== */
+
+    /*
+       Mantidos temporariamente para não quebrar
+       CSS antigo enquanto index.css é refeito.
+    */
+
+    --button-slide-duration:
+        0.9s;
+
+    --buttons-sequence-duration:
+        0.9s;
+}
+
+/* #endregion */
+
+
+/* #region RESET */
+
+* {
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+
+    min-height: 100%;
+}
+
+html {
+    background:
+        var(--color-black);
+}
+
+body {
+    margin: 0;
+
+    background:
+        var(--color-black);
+
+    font-family:
+        var(
+            --font-body,
+            serif
+        );
+
+    overflow: hidden;
+
+    overscroll-behavior: none;
+}
+
+button,
+a,
+img {
+    -webkit-tap-highlight-color:
+        transparent;
+}
+
+img {
+    display: block;
+
+    max-width: 100%;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    -webkit-user-drag: none;
+
+    pointer-events: none;
+}
+
+/* #endregion */
+
+
+/* #region ESTRUTURA GLOBAL */
+
+.app {
+    position: relative;
+
+    width: 100vw;
+
+    height: 100vh;
+    height: 100dvh;
+
+    overflow: hidden;
+
+    background-color:
+        var(--color-black);
+
+    background-image:
+        url("../assets/fundo.webp");
+
+    background-size:
+        cover;
+
+    background-position:
+        center top;
+
+    background-repeat:
+        no-repeat;
+
+    isolation: isolate;
+}
+
+/* #endregion */
+
+
+/* #region SISTEMA UNIVERSAL DE TRANSIÇÃO */
+
+/*
+   Estrutura HTML esperada:
+
+   <div class="page-transition">
+
+       <div class="transition-backdrop"></div>
+
+       <div class="transition-emblem">
+
+           <div class="transition-aura"></div>
+
+           <img
+               class="
+                   transition-sword
+                   transition-sword-a
+               "
+           >
+
+           <img
+               class="
+                   transition-sword
+                   transition-sword-b
+               "
+           >
+
+           <img
+               class="transition-shield"
+           >
+
+       </div>
+
+   </div>
+
+
+   Estados controlados pelo JavaScript:
+
+   .is-active
+   .is-black
+
+   .is-shield-in
+   .is-swords-in
+
+   .is-pulse-1
+   .is-pulse-2
+   .is-pulse-4
+
+   .is-emblem-out
+
+   .is-handoff
+*/
+
+
+.page-transition {
+    position: fixed;
+
+    inset: 0;
+
+    width: 100vw;
+
+    height: 100vh;
+    height: 100dvh;
+
+    z-index: 1000;
+
+    overflow: hidden;
+
+    pointer-events: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/*
+   Quando ativa, bloqueia cliques na página
+   durante a animação.
+*/
+
+.page-transition.is-active {
+    pointer-events: auto;
+}
+
+
+/* #endregion */
+
+
+/* #region FUNDO DA TRANSIÇÃO */
+
+/*
+   O backdrop é a "cortina preta"
+   usada durante a navegação.
+
+   Estado normal:
+   transparente.
+
+   Saída da página:
+   .is-darkening
+
+   Chegada da página:
+   começa preto através do sistema
+   transition-handoff-pending.
+
+   Depois:
+   .is-revealing-page
+*/
+
+.transition-backdrop {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 0;
+
+    background:
+        #000;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity
+        var(--transition-backdrop-duration)
+        ease-in-out;
+
+    will-change:
+        opacity;
+}
+
+
+/*
+   Preto fixo opcional.
+*/
+
+.page-transition.is-black
+.transition-backdrop {
+    opacity: 1;
+}
+
+
+/*
+   SAÍDA DA PÁGINA
+
+   Enquanto escudo e espadas entram,
+   a página escurece gradualmente.
+*/
+
+.page-transition.is-darkening
+.transition-backdrop {
+    opacity: 1;
+}
+
+
+/*
+   CHEGADA DA NOVA PÁGINA
+
+   Depois do segundo pulso,
+   o preto começa a desaparecer
+   revelando o wallpaper.
+*/
+
+.page-transition.is-revealing-page
+.transition-backdrop {
+    opacity: 0;
+}
+
+/* #endregion */
+
+
+/* #region CONJUNTO ESCUDO + ESPADAS */
+
+.transition-emblem {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width:
+        var(--transition-shield-size);
+
+    height:
+        var(--transition-shield-size);
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+
+    z-index: 2;
+
+    pointer-events: none;
+
+    isolation: isolate;
+}
+
+
+/*
+   Evita pequenos glitches de composição
+   durante animações rápidas.
+*/
+
+.transition-emblem,
+.transition-emblem * {
+    backface-visibility:
+        hidden;
+
+    -webkit-backface-visibility:
+        hidden;
+}
+
+/* #endregion */
+
+
+/* #region ESCUDO */
+
+.transition-shield {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width:
+        var(--transition-shield-size);
+
+    height: auto;
+
+    z-index: 3;
+
+    opacity: 0;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        scale(0.06);
+
+    transform-origin:
+        center center;
+
+    filter:
+        drop-shadow(
+            0 4px 8px
+            rgba(0, 0, 0, 0.65)
+        );
+
+    transition:
+        transform
+        var(--transition-shield-in-duration)
+        var(--transition-shield-in-easing),
+
+        opacity
+        calc(
+            var(--transition-shield-in-duration)
+            * 0.72
+        )
+        ease;
+
+    will-change:
+        transform,
+        opacity,
+        filter;
+}
+
+
+/*
+   ENTRADA
+
+   Escudo nasce praticamente do zero,
+   aumenta e fica totalmente visível.
+*/
+
+.page-transition.is-shield-in
+.transition-shield {
+    opacity: 1;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        scale(1);
+}
+
+/* #endregion */
+
+
+/* #region ESPADAS */
+
+.transition-sword {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: auto;
+
+    height:
+        var(--transition-sword-height);
+
+    max-width: none;
+
+    z-index: 2;
+
+    opacity: 0;
+
+    transform-origin:
+        center center;
+
+    filter:
+        drop-shadow(
+            0 4px 7px
+            rgba(0, 0, 0, 0.72)
+        );
+
+    transition:
+        transform
+        var(--transition-swords-in-duration)
+        var(--transition-swords-in-easing),
+
+        opacity
+        0.22s
+        ease;
+
+    will-change:
+        transform,
+        opacity;
+}
+
+
+/*
+   ESPADA A
+
+   Começa fora da tela,
+   no canto superior esquerdo.
+*/
+
+.transition-sword-a {
+    transform:
+        translate(
+            calc(
+                -50%
+                - 70vw
+            ),
+            calc(
+                -50%
+                - 76vh
+            )
+        )
+        rotate(
+            var(--transition-sword-a-angle)
+        );
+}
+
+
+/*
+   ESPADA B
+
+   Começa fora da tela,
+   no canto superior direito.
+*/
+
+.transition-sword-b {
+    transform:
+        translate(
+            calc(
+                -50%
+                + 70vw
+            ),
+            calc(
+                -50%
+                - 76vh
+            )
+        )
+        rotate(
+            var(--transition-sword-b-angle)
+        );
+}
+
+
+/*
+   As duas estacionam atrás do escudo.
+*/
+
+.page-transition.is-swords-in
+.transition-sword-a {
+    opacity: 1;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        rotate(
+            var(--transition-sword-a-angle)
+        );
+}
+
+
+.page-transition.is-swords-in
+.transition-sword-b {
+    opacity: 1;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        rotate(
+            var(--transition-sword-b-angle)
+        );
+}
+
+/* #endregion */
+
+
+/* #region AURA DO ESCUDO */
+
+/*
+   A aura não faz parte do WebP.
+
+   É criada via CSS e permanece atrás
+   do escudo e das espadas.
+*/
+
+.transition-aura {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width:
+        calc(
+            var(--transition-shield-size)
+            * 1.22
+        );
+
+    aspect-ratio:
+        1 / 1;
+
+    border-radius:
+        50%;
+
+    z-index: 1;
+
+    opacity: 0;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        scale(0.72);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(
+                255,
+                231,
+                164,
+                0.70
+            )
+            0%,
+
+            rgba(
+                255,
+                193,
+                78,
+                0.42
+            )
+            27%,
+
+            rgba(
+                255,
+                153,
+                31,
+                0.18
+            )
+            52%,
+
+            rgba(
+                255,
+                153,
+                31,
+                0
+            )
+            74%
+        );
+
+    filter:
+        blur(12px);
+
+    mix-blend-mode:
+        screen;
+
+    pointer-events:
+        none;
+
+    will-change:
+        opacity,
+        transform;
+}
+
+/* #endregion */
+
+
+/* #region PULSO DO ESCUDO */
+
+@keyframes transition-aura-pulse {
+
+    0%,
+    100% {
+        opacity: 0.08;
+
+        transform:
+            translate(
+                -50%,
+                -50%
+            )
+            scale(0.88);
+    }
+
+    50% {
+        opacity: 0.65;
+
+        transform:
+            translate(
+                -50%,
+                -50%
+            )
+            scale(1.08);
+    }
+}
+
+
+@keyframes transition-shield-golden-pulse {
+
+    0%,
+    100% {
+        filter:
+            brightness(1)
+
+            drop-shadow(
+                0 4px 8px
+                rgba(0, 0, 0, 0.65)
+            )
+
+            drop-shadow(
+                0 0 2px
+                rgba(255, 174, 55, 0.12)
+            );
+    }
+
+    50% {
+        filter:
+            brightness(1.06)
+
+            drop-shadow(
+                0 0 7px
+                rgba(255, 174, 55, 0.68)
+            )
+
+            drop-shadow(
+                0 0 15px
+                rgba(255, 205, 100, 0.30)
+            );
+    }
+}
+
+
+/* 1 pulsação */
+
+.page-transition.is-pulse-1
+.transition-aura {
+    animation:
+        transition-aura-pulse
+        var(--transition-aura-pulse-duration)
+        ease-in-out
+        1
+        both;
+}
+
+.page-transition.is-pulse-1
+.transition-shield {
+    animation:
+        transition-shield-golden-pulse
+        var(--transition-aura-pulse-duration)
+        ease-in-out
+        1
+        both;
+}
+
+
+/* 2 pulsações */
+
+.page-transition.is-pulse-2
+.transition-aura {
+    animation:
+        transition-aura-pulse
+        var(--transition-aura-pulse-duration)
+        ease-in-out
+        2
+        both;
+}
+
+.page-transition.is-pulse-2
+.transition-shield {
+    animation:
+        transition-shield-golden-pulse
+        var(--transition-aura-pulse-duration)
+        ease-in-out
+        2
+        both;
+}
+
+
+/*
+   4 pulsações.
+
+   Vamos poder usar isso na intro principal
+   da index.
+*/
+
+.page-transition.is-pulse-4
+.transition-aura {
+    animation:
+        transition-aura-pulse
+        var(--transition-aura-pulse-duration)
+        ease-in-out
+        4
+        both;
+}
+
+.page-transition.is-pulse-4
+.transition-shield {
+    animation:
+        transition-shield-golden-pulse
+        var(--transition-aura-pulse-duration)
+        ease-in-out
+        4
+        both;
+}
+
+/* #endregion */
+
+
+/* #region SAÍDA DO ESCUDO E DAS ESPADAS */
+
+/*
+   Ao adicionar:
+
+   .is-emblem-out
+
+   escudo diminui + desaparece
+
+   e as duas espadas fazem o movimento
+   inverso da entrada.
+*/
+
+
+.page-transition.is-emblem-out
+.transition-shield {
+    opacity: 0;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        scale(0.06);
+
+    transition-duration:
+        var(--transition-emblem-out-duration);
+
+    transition-timing-function:
+        var(--transition-emblem-out-easing);
+}
+
+
+.page-transition.is-emblem-out
+.transition-sword {
+    opacity: 0;
+
+    transition-duration:
+        var(--transition-emblem-out-duration);
+
+    transition-timing-function:
+        var(--transition-emblem-out-easing);
+}
+
+
+.page-transition.is-emblem-out
+.transition-sword-a {
+    transform:
+        translate(
+            calc(
+                -50%
+                - 70vw
+            ),
+            calc(
+                -50%
+                - 76vh
+            )
+        )
+        rotate(
+            var(--transition-sword-a-angle)
+        );
+}
+
+
+.page-transition.is-emblem-out
+.transition-sword-b {
+    transform:
+        translate(
+            calc(
+                -50%
+                + 70vw
+            ),
+            calc(
+                -50%
+                - 76vh
+            )
+        )
+        rotate(
+            var(--transition-sword-b-angle)
+        );
+}
+
+
+.page-transition.is-emblem-out
+.transition-aura {
+    opacity: 0;
+
+    animation: none;
+}
+
+/* #endregion */
+
+
+/* #region HANDOFF ENTRE PÁGINAS */
+
+/*
+   Este estado é MUITO importante.
+
+   Quando uma página nova carregar após
+   uma transição, ela pode começar já com:
+
+   escudo = tamanho máximo
+   espadas = cruzadas
+
+   sem reproduzir novamente a entrada.
+
+   Exemplo:
+
+   page-transition
+   is-active
+   is-handoff
+   is-shield-in
+   is-swords-in
+
+
+   O JS remove .is-handoff após o primeiro
+   frame, permitindo executar a saída.
+*/
+
+
+.page-transition.is-handoff
+.transition-shield,
+
+.page-transition.is-handoff
+.transition-sword {
+    transition: none;
+}
+
+
+.page-transition.is-handoff
+.transition-shield {
+    opacity: 1;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        scale(1);
+}
+
+
+.page-transition.is-handoff
+.transition-sword-a {
+    opacity: 1;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        rotate(
+            var(--transition-sword-a-angle)
+        );
+}
+
+
+.page-transition.is-handoff
+.transition-sword-b {
+    opacity: 1;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        rotate(
+            var(--transition-sword-b-angle)
+        );
+}
+
+/* #endregion */
+
+
+/* #region PLACA GLOBAL */
+
+.plate-wrap {
+    position: relative;
+
+    width: 100%;
+
+    user-select: none;
+}
+
+
+.plate-image {
+    position: relative;
+
+    width: 100%;
+    height: auto;
+
+    z-index: 1;
+
+    pointer-events: none;
+}
+
+
+/* Reflexo metálico */
+
+.plate-shine {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: auto;
+
+    z-index: 2;
+
+    pointer-events: none;
+
+    opacity: 0;
+
+    filter:
+        brightness(2)
+        contrast(1.15)
+        saturate(1.1);
+
+    mix-blend-mode:
+        screen;
+
+    clip-path:
+        polygon(
+            -40% 0,
+            -20% 0,
+            0% 100%,
+            -20% 100%
+        );
+
+    animation:
+        plate-metal-shine
+        6s
+        ease-in-out
+        infinite;
+
+    will-change:
+        clip-path,
+        opacity;
+}
+
+
+@keyframes plate-metal-shine {
+
+    0%,
+    58% {
+
+        opacity: 0;
+
+        clip-path:
+            polygon(
+                -40% 0,
+                -20% 0,
+                0% 100%,
+                -20% 100%
+            );
+    }
+
+    62% {
+        opacity: 0.85;
+    }
+
+    78% {
+
+        opacity: 0.85;
+
+        clip-path:
+            polygon(
+                100% 0,
+                120% 0,
+                140% 100%,
+                120% 100%
+            );
+    }
+
+    82%,
+    100% {
+
+        opacity: 0;
+
+        clip-path:
+            polygon(
+                100% 0,
+                120% 0,
+                140% 100%,
+                120% 100%
+            );
+    }
+}
+
+
+.plate-title {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 3;
+
+    padding:
+        0
+        12%;
+
+    text-align: center;
+
+    font-family:
+        var(
+            --font-subtitle-primary,
+            serif
+        );
+
+    font-size:
+        clamp(
+            18px,
+            5vw,
+            28px
+        );
+
+    font-weight:
+        700;
+
+    line-height:
+        1;
+
+    letter-spacing:
+        0.04em;
+
+    color:
+        #f2d79b;
+
+    text-shadow:
+        0 2px 2px
+        rgba(
+            0,
+            0,
+            0,
+            1
+        ),
+
+        0 0 5px
+        rgba(
+            0,
+            0,
+            0,
+            0.9
+        );
+
+    pointer-events:
+        none;
+}
+
+
+.logo-credit {
+    position: absolute;
+
+    top: 100%;
+    left: 50%;
+
+    transform:
+        translateX(-50%)
+        translateY(-2px);
+
+    width: 100%;
+
+    text-align: center;
+
+    font-family:
+        var(
+            --font-body,
+            serif
+        );
+
+    font-size:
+        clamp(
+            9px,
+            1.4vh,
+            13px
+        );
+
+    font-style:
+        italic;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.95
+        );
+
+    text-shadow:
+        0 1px 2px
+        #000;
+
+    white-space:
+        nowrap;
+}
+
+/* #endregion */
+
+
+/* #region ENTRADA UNIVERSAL DA PLACA */
+
+/*
+   Basta usar:
+
+   <div class="
+       plate-wrap
+       plate-entry
+   ">
+
+   Inicialmente ela ficará acima da viewport.
+
+   Depois o JS adiciona:
+   .is-visible
+*/
+
+
+.plate-entry {
+    opacity: 0;
+
+    translate:
+        0
+        -115vh;
+
+    transition:
+        translate
+        var(--secondary-entry-duration)
+        var(--plate-entry-easing),
+
+        opacity
+        0.18s
+        ease;
+
+    will-change:
+        translate,
+        opacity;
+}
+
+
+.plate-entry.is-visible {
+    opacity: 1;
+
+    translate:
+        0
+        0;
+}
+
+
+/*
+   Keyframe antigo mantido temporariamente
+   para compatibilidade.
+*/
+
+@keyframes plate-enter-top {
+
+    from {
+        translate:
+            0
+            -110vh;
+    }
+
+    to {
+        translate:
+            0
+            0;
+    }
+}
+
+/* #endregion */
+
+
+/* #region BOTÕES VISUAIS */
+
+.site-button {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-decoration: none;
+
+    color:
+        var(--color-gold);
+
+    -webkit-tap-highlight-color:
+        transparent;
+}
+
+
+.site-button img {
+    width: auto;
+
+    max-width:
+        78%;
+
+    max-height:
+        72%;
+
+    object-fit:
+        contain;
+
+    pointer-events:
+        none;
+
+    /*
+       IMPORTANTE:
+
+       A aura NÃO começa mais automaticamente.
+
+       Agora ela só começa quando adicionarmos
+       .button-aura-active ao container.
+    */
+
+    filter:
+        brightness(1)
+
+        drop-shadow(
+            0 0 2px
+            rgba(
+                255,
+                174,
+                55,
+                0.16
+            )
+        );
+
+    will-change:
+        filter;
+}
+
+
+.button-title {
+    width: 100%;
+
+    margin-top:
+        4px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    font-family:
+        var(
+            --font-button,
+            serif
+        );
+
+    font-size:
+        clamp(
+            10px,
+            1.55vh,
+            15px
+        );
+
+    font-weight:
+        700;
+
+    line-height:
+        1.05;
+
+    letter-spacing:
+        0.04em;
+
+    color:
+        var(--color-gold);
+
+    text-shadow:
+        0 2px 2px
+        #000,
+
+        0 0 5px
+        #000;
+}
+
+/* #endregion */
+
+
+/* #region AURA DOURADA DOS BOTÕES */
+
+@keyframes button-golden-aura {
+
+    0%,
+    100% {
+
+        filter:
+            brightness(1)
+
+            drop-shadow(
+                0 0 2px
+                rgba(
+                    255,
+                    174,
+                    55,
+                    0.16
+                )
+            );
+    }
+
+    50% {
+
+        filter:
+            brightness(1.08)
+
+            drop-shadow(
+                0 0 7px
+                rgba(
+                    255,
+                    174,
+                    55,
+                    0.72
+                )
+            )
+
+            drop-shadow(
+                0 0 15px
+                rgba(
+                    255,
+                    205,
+                    100,
+                    0.32
+                )
+            );
+    }
+}
+
+
+/*
+   Podemos colocar a classe no container:
+
+   <div class="
+       buttons
+       button-aura-active
+   ">
+
+   ou diretamente no botão.
+*/
+
+
+.button-aura-active
+.site-button
+img,
+
+.site-button.button-aura-active
+img {
+    animation:
+        button-golden-aura
+        var(--button-aura-duration)
+        ease-in-out
+        var(--button-aura-delay)
+        infinite;
+}
+
+/* #endregion */
+
+
+/* #region ENTRADA SUAVE DE CONTEÚDO */
+
+/*
+   Para páginas internas.
+
+   Ao invés de os botões saírem do centro,
+   eles aparecem em suas posições finais
+   com fade + pequeno movimento vertical.
+
+   Estrutura:
+
+   <div class="content-reveal">
+       <a class="reveal-item">...</a>
+       ...
+   </div>
+
+   Depois:
+
+   contentReveal.classList.add(
+       "is-visible"
+   );
+*/
+
+
+.reveal-item {
+    opacity: 0;
+
+    transform:
+        translateY(12px)
+        scale(0.97);
+
+    transition:
+        opacity
+        var(--content-reveal-duration)
+        ease,
+
+        transform
+        var(--content-reveal-duration)
+        var(--content-reveal-easing);
+
+    will-change:
+        opacity,
+        transform;
+}
+
+
+.content-reveal.is-visible
+.reveal-item {
+    opacity: 1;
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+/*
+   Pequeno stagger automático.
+
+   Útil, por exemplo, para as 5 facções.
+*/
+
+.content-reveal
+.reveal-item:nth-child(1) {
+    transition-delay:
+        0ms;
+}
+
+.content-reveal
+.reveal-item:nth-child(2) {
+    transition-delay:
+        70ms;
+}
+
+.content-reveal
+.reveal-item:nth-child(3) {
+    transition-delay:
+        140ms;
+}
+
+.content-reveal
+.reveal-item:nth-child(4) {
+    transition-delay:
+        210ms;
+}
+
+.content-reveal
+.reveal-item:nth-child(5) {
+    transition-delay:
+        280ms;
+}
+
+.content-reveal
+.reveal-item:nth-child(6) {
+    transition-delay:
+        350ms;
+}
+
+/* #endregion */
+
+
+/* #region ENTRADAS ANTIGAS — COMPATIBILIDADE */
+
+/*
+   Estes keyframes não serão o sistema novo
+   da index.
+
+   Estou mantendo temporariamente para que
+   nada antigo que ainda dependa deles
+   quebre antes de refazermos index.css.
+*/
+
+
+@keyframes button-enter-left {
+
+    from {
+        translate:
+            -110vw
+            0;
+    }
+
+    to {
+        translate:
+            0
+            0;
+    }
+}
+
+
+@keyframes button-enter-right {
+
+    from {
+        translate:
+            110vw
+            0;
+    }
+
+    to {
+        translate:
+            0
+            0;
+    }
+}
+
+/* #endregion */
+
+
+/* #region RODAPÉ GLOBAL */
+
+.footer-note {
+    position: absolute;
+
+    left: 5%;
+    bottom: 1.2%;
+
+    width: 90%;
+
+    padding:
+        4px
+        6px;
+
+    text-align:
+        center;
+
+    font-family:
+        var(
+            --font-body,
+            serif
+        );
+
+    font-size:
+        clamp(
+            8px,
+            1.2vh,
+            11px
+        );
+
+    line-height:
+        1.05;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.94
+        );
+
+    text-shadow:
+        0 1px 1px
+        #000;
+
+    z-index: 10;
+}
+
+
+.footer-note a {
+    color:
+        var(--color-gold);
+
+    font-weight:
+        700;
+
+    text-decoration:
+        none;
+}
+
+/* #endregion */
+
+
+/* #region MOBILE — RETRATO */
+
+/*
+   Nosso layout mobile principal.
+
+   A largura é a referência mais importante
+   para dimensionar o brasão.
+*/
+
+@media
+    (max-width: 1023px)
+    and (orientation: portrait) {
+
+    :root {
+
+        --transition-shield-size:
+            clamp(
+                220px,
+                62vw,
+                330px
+            );
+
+        --transition-sword-height:
+            calc(
+                var(--transition-shield-size)
+                * 1.72
+            );
+    }
+
+}
+
+/* #endregion */
+
+
+/* #region DESKTOP — PAISAGEM */
+
+@media
+    (min-width: 1024px)
+    and (orientation: landscape) {
+
+    :root {
+
+        --transition-shield-size:
+            clamp(
+                300px,
+                27vw,
+                455px
+            );
+
+        --transition-sword-height:
+            calc(
+                var(--transition-shield-size)
+                * 1.72
+            );
+    }
+
+
+    .app {
+        background-image:
+            url(
+                "../assets/fundo-desktop.webp"
+            );
+
+        background-position:
+            center;
+    }
+
+
+    .plate-title {
+        font-size:
+            clamp(
+                20px,
+                1.7vw,
+                30px
+            );
+    }
+
+
+    .logo-credit {
+        font-size:
+            clamp(
+                10px,
+                0.75vw,
+                13px
+            );
+    }
+
+
+    .button-title {
+        font-size:
+            clamp(
+                11px,
+                0.9vw,
+                16px
+            );
+    }
+
+
+    .footer-note {
+        left: 50%;
+
+        width:
+            min(
+                90vw,
+                1150px
+            );
+
+        transform:
+            translateX(-50%);
+
+        bottom:
+            1.5%;
+
+        font-size:
+            clamp(
+                9px,
+                0.62vw,
+                11px
+            );
+    }
+}
+
+/* #endregion */
+
+
+/* #region TELAS MUITO BAIXAS */
+
+@media
+    (max-height: 620px) {
+
+    :root {
+
+        --transition-shield-size:
+            clamp(
+                190px,
+                45vh,
+                300px
+            );
+
+    }
+
+}
+
+/* #endregion */
+
+
+/* #region ACESSIBILIDADE — REDUÇÃO DE MOVIMENTO */
+
+/*
+   Se o usuário tiver configurado o sistema
+   operacional para reduzir animações,
+   evitamos movimentos longos.
+*/
+
+@media
+    (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior:
+            auto !important;
+    }
+
+
+    .transition-shield,
+    .transition-sword,
+    .transition-backdrop,
+    .plate-entry,
+    .reveal-item {
+        transition-duration:
+            0.01ms !important;
+
+        transition-delay:
+            0ms !important;
+    }
+
+
+    .transition-aura,
+    .transition-shield,
+    .site-button img,
+    .plate-shine {
+        animation-duration:
+            0.01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+    }
+}
+
+/* #endregion */
+
+/* =========================================================
+   ANTI-FLASH ENTRE PÁGINAS
+   ========================================================= */
+
+/*
+   Esta classe é adicionada ao <html>
+   pelo pequeno script existente no <head>.
+
+   Ela é aplicada ANTES do global.js iniciar.
+
+   Objetivo:
+
+   - impedir qualquer flash do wallpaper;
+   - garantir fundo preto desde o primeiro frame;
+   - desenhar escudo e espadas já montados;
+   - esconder completamente o carregamento
+     entre dois arquivos HTML.
+*/
+
+
+/* #region FUNDO PRETO IMEDIATO */
+
+html.transition-handoff-pending,
+html.transition-handoff-pending body {
+    background:
+        #000 !important;
+}
+
+
+/*
+   Mesmo que o .app já tenha sido criado,
+   não permitimos que o wallpaper apareça
+   durante o carregamento da nova página.
+*/
+
+html.transition-handoff-pending
+.app {
+    background-color:
+        #000 !important;
+
+    background-image:
+        none !important;
+}
+
+/* #endregion */
+
+
+/* #region CAMADA DE TRANSIÇÃO */
+
+/*
+   Garante que a camada universal ocupe
+   e controle toda a tela durante o handoff.
+*/
+
+html.transition-handoff-pending
+.page-transition {
+    pointer-events:
+        auto;
+}
+
+
+/*
+   O backdrop já nasce completamente preto.
+
+   Não queremos animação neste ponto,
+   porque ele está escondendo a troca de HTML.
+*/
+
+html.transition-handoff-pending
+.transition-backdrop {
+    opacity:
+        1 !important;
+
+    transition:
+        none !important;
+}
+
+/* #endregion */
+
+
+/* #region ESCUDO JÁ MONTADO */
+
+html.transition-handoff-pending
+.transition-shield {
+    opacity:
+        1;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        scale(1);
+
+    transition:
+        none !important;
+}
+
+/* #endregion */
+
+
+/* #region ESPADAS JÁ MONTADAS */
+
+html.transition-handoff-pending
+.transition-sword-a {
+    opacity:
+        1;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        rotate(
+            var(--transition-sword-a-angle)
+        );
+
+    transition:
+        none !important;
+}
+
+
+html.transition-handoff-pending
+.transition-sword-b {
+    opacity:
+        1;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        rotate(
+            var(--transition-sword-b-angle)
+        );
+
+    transition:
+        none !important;
+}
+
+/* #endregion */

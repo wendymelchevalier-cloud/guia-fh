@@ -1,0 +1,913 @@
+/* =========================================================
+   GUIA DO FOR HONOR
+   GUIA-DO-HEROI.CSS
+
+   Responsabilidades:
+   - Layout da página Guia do Herói
+   - Posicionamento da placa
+   - Grid das 5 facções
+   - Mobile: 2 + 2 + 1 centralizado
+   - Desktop: 5 botões em linha
+   - Botão "Voltar ao início"
+   - Aparição do rodapé
+
+   As animações de:
+   - escudo
+   - espadas
+   - aura
+   - fade dos botões
+
+   pertencem ao global.css / global.js.
+   ========================================================= */
+
+
+/* #region CONFIGURAÇÕES */
+
+:root {
+
+    /*
+       Entrada da placa desta página.
+
+       O global.js usa
+       --secondary-entry-duration
+       para páginas internas.
+    */
+
+    --secondary-entry-duration:
+        1.15s;
+
+
+    /*
+       Fade do rodapé.
+    */
+
+    --guide-footer-fade-duration:
+        0.8s;
+
+}
+
+/* #endregion */
+
+
+/* =========================================================
+   PLACA
+   ========================================================= */
+
+/* #region PLACA — BASE */
+
+/*
+   Assim como na index, a placa já possui
+   sua posição final definida.
+
+   Entretanto começa completamente
+   acima da viewport.
+
+   O global.js adiciona:
+
+       .plate-wrap.is-visible
+*/
+
+.plate-wrap {
+    position: absolute;
+
+    top:
+        5%;
+
+    left:
+        50%;
+
+    width:
+        min(
+            92vw,
+            800px
+        );
+
+    transform:
+        translateX(-50%);
+
+    translate:
+        0
+        -115vh;
+
+    opacity:
+        0;
+
+    z-index:
+        5;
+
+    pointer-events:
+        none;
+
+    transition:
+        translate
+        var(--secondary-entry-duration)
+        var(
+            --plate-entry-easing,
+            cubic-bezier(
+                0.18,
+                0.82,
+                0.24,
+                1
+            )
+        ),
+
+        opacity
+        0.15s
+        ease;
+
+    will-change:
+        translate,
+        opacity;
+}
+
+
+/*
+   Placa descendo.
+*/
+
+.plate-wrap.is-visible {
+    translate:
+        0
+        0;
+
+    opacity:
+        1;
+}
+
+/* #endregion */
+
+
+/* =========================================================
+   MENU DAS FACÇÕES
+   ========================================================= */
+
+/* #region MENU — MOBILE */
+
+/*
+   MOBILE:
+
+       [ Cavaleiros ] [ Vikings ]
+
+       [ Samurai    ] [ Wu Lin  ]
+
+              [ Outlanders ]
+
+   O quinto botão ocupa as duas colunas,
+   mas recebe metade da largura e fica
+   centralizado.
+*/
+
+.faction-menu {
+    position:
+        absolute;
+
+    top:
+        27%;
+
+    left:
+        5%;
+
+    width:
+        90%;
+
+    height:
+        42%;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    grid-template-rows:
+        repeat(
+            3,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    column-gap:
+        5%;
+
+    row-gap:
+        1.5%;
+
+    z-index:
+        3;
+}
+
+
+/*
+   Os próprios efeitos opacity/transform
+   são controlados pela classe .reveal-item
+   do global.css.
+*/
+
+.faction-button {
+    min-width:
+        0;
+
+    min-height:
+        0;
+}
+
+
+/*
+   OUTLANDERS
+
+   Ocupa a terceira linha inteira,
+   mas mantém a mesma largura visual
+   dos outros botões.
+*/
+
+.faction-button:nth-child(5) {
+    grid-column:
+        1 / -1;
+
+    width:
+        47.5%;
+
+    justify-self:
+        center;
+}
+
+/* #endregion */
+
+
+/* =========================================================
+   TAMANHO DOS ÍCONES
+   ========================================================= */
+
+/* #region ÍCONES */
+
+/*
+   O global.css já limita imagens dos
+   .site-button.
+
+   Aqui adicionamos uma segurança própria
+   para esta página para impedir imagens
+   gigantes caso a proporção do WebP varie.
+*/
+
+.faction-button img {
+    width:
+        auto;
+
+    max-width:
+        78%;
+
+    max-height:
+        72%;
+
+    object-fit:
+        contain;
+}
+
+/* #endregion */
+
+
+/* =========================================================
+   BOTÃO VOLTAR AO INÍCIO
+   ========================================================= */
+
+/* #region VOLTAR */
+
+/*
+   Usamos a propriedade "translate"
+   separada de "transform".
+
+   Isso é importante porque .reveal-item
+   usa transform para seu fade de entrada.
+*/
+
+.back-button-wrap {
+    position:
+        absolute;
+
+    top:
+        72%;
+
+    left:
+        50%;
+
+    translate:
+        -50%
+        0;
+
+    width:
+        min(
+            82vw,
+            430px
+        );
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    z-index:
+        4;
+
+
+    /*
+       Queremos que ele seja o último
+       item a aparecer no fade.
+    */
+
+    transition-delay:
+        350ms;
+}
+
+
+/*
+   Botão textual.
+*/
+
+.action-button {
+    width:
+        100%;
+
+    min-height:
+        38px;
+
+    padding:
+        10px
+        18px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    text-align:
+        center;
+
+    text-decoration:
+        none;
+
+    font-family:
+        var(
+            --font-button,
+            serif
+        );
+
+    font-size:
+        clamp(
+            10px,
+            2.7vw,
+            14px
+        );
+
+    font-weight:
+        700;
+
+    line-height:
+        1.1;
+
+    letter-spacing:
+        0.045em;
+
+    color:
+        #f0d39a;
+
+    background:
+        rgba(
+            0,
+            0,
+            0,
+            0.58
+        );
+
+    border:
+        1px
+        solid
+        rgba(
+            240,
+            211,
+            154,
+            0.72
+        );
+
+    border-radius:
+        4px;
+
+    box-shadow:
+        inset
+        0
+        0
+        8px
+        rgba(
+            255,
+            205,
+            100,
+            0.08
+        ),
+
+        0
+        2px
+        5px
+        rgba(
+            0,
+            0,
+            0,
+            0.75
+        );
+
+    text-shadow:
+        0
+        2px
+        2px
+        #000,
+
+        0
+        0
+        5px
+        #000;
+
+    -webkit-tap-highlight-color:
+        transparent;
+
+    transition:
+        border-color
+        0.2s
+        ease,
+
+        background
+        0.2s
+        ease,
+
+        box-shadow
+        0.2s
+        ease;
+}
+
+/* #endregion */
+
+
+/* =========================================================
+   RODAPÉ
+   ========================================================= */
+
+/* #region RODAPÉ */
+
+/*
+   Igual à index:
+
+   fica escondido durante a animação
+   e aparece somente ao final.
+*/
+
+.footer-note {
+    opacity:
+        0;
+
+    pointer-events:
+        none;
+
+    transition:
+        opacity
+        var(--guide-footer-fade-duration)
+        ease;
+}
+
+
+.footer-note.is-visible {
+    opacity:
+        1;
+
+    pointer-events:
+        auto;
+}
+
+/* #endregion */
+
+
+/* =========================================================
+   INTERAÇÃO — DESKTOP
+   ========================================================= */
+
+/* #region HOVER */
+
+@media
+    (hover: hover)
+    and (pointer: fine) {
+
+    /*
+       Movimento discreto dos ícones.
+    */
+
+    .faction-button {
+        transition:
+            transform
+            0.18s
+            ease;
+    }
+
+
+    .faction-button:hover {
+        transform:
+            translateY(-3px)
+            scale(1.025);
+    }
+
+
+    .faction-button:active {
+        transform:
+            translateY(0)
+            scale(0.985);
+    }
+
+
+    /*
+       Hover do botão voltar.
+    */
+
+    .action-button:hover {
+        background:
+            rgba(
+                20,
+                14,
+                5,
+                0.72
+            );
+
+        border-color:
+            rgba(
+                255,
+                220,
+                145,
+                0.95
+            );
+
+        box-shadow:
+            inset
+            0
+            0
+            12px
+            rgba(
+                255,
+                205,
+                100,
+                0.14
+            ),
+
+            0
+            0
+            8px
+            rgba(
+                255,
+                174,
+                55,
+                0.18
+            ),
+
+            0
+            2px
+            5px
+            rgba(
+                0,
+                0,
+                0,
+                0.75
+            );
+    }
+
+
+    .action-button:active {
+        transform:
+            scale(0.985);
+    }
+
+}
+
+/* #endregion */
+
+
+/* =========================================================
+   MOBILE — RETRATO
+   ========================================================= */
+
+/* #region MOBILE 9:19,5 */
+
+@media
+    (max-width: 1023px)
+    and (orientation: portrait) {
+
+    /* -------------------------
+       Placa
+       ------------------------- */
+
+    .plate-wrap {
+        top:
+            5%;
+
+        width:
+            min(
+                92vw,
+                800px
+            );
+    }
+
+
+    /* -------------------------
+       Facções
+       ------------------------- */
+
+    .faction-menu {
+        top:
+            27%;
+
+        left:
+            5%;
+
+        width:
+            90%;
+
+        height:
+            42%;
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(
+                    0,
+                    1fr
+                )
+            );
+
+        grid-template-rows:
+            repeat(
+                3,
+                minmax(
+                    0,
+                    1fr
+                )
+            );
+
+        column-gap:
+            5%;
+
+        row-gap:
+            1.5%;
+    }
+
+
+    /*
+       Quinto botão centralizado.
+    */
+
+    .faction-button:nth-child(5) {
+        grid-column:
+            1 / -1;
+
+        width:
+            47.5%;
+
+        justify-self:
+            center;
+    }
+
+
+    /* -------------------------
+       Voltar
+       ------------------------- */
+
+    .back-button-wrap {
+        top:
+            72%;
+
+        width:
+            min(
+                82vw,
+                430px
+            );
+    }
+
+}
+
+/* #endregion */
+
+
+/* =========================================================
+   DESKTOP
+   ========================================================= */
+
+/* #region DESKTOP — 16:9 */
+
+@media
+    (min-width: 1024px)
+    and (orientation: landscape) {
+
+    /* -------------------------
+       Placa
+       ------------------------- */
+
+    .plate-wrap {
+        top:
+            4%;
+
+        width:
+            min(
+                32vw,
+                520px
+            );
+    }
+
+
+    /* -------------------------
+       Menu das facções
+       ------------------------- */
+
+    /*
+       No desktop seguimos a mesma lógica
+       visual da index:
+
+       os cinco botões ficam em uma linha.
+    */
+
+    .faction-menu {
+        top:
+            50%;
+
+        left:
+            50%;
+
+        width:
+            min(
+                82vw,
+                1100px
+            );
+
+        height:
+            min(
+                31vh,
+                300px
+            );
+
+        transform:
+            translate(
+                -50%,
+                -50%
+            );
+
+        grid-template-columns:
+            repeat(
+                5,
+                minmax(
+                    0,
+                    1fr
+                )
+            );
+
+        grid-template-rows:
+            1fr;
+
+        column-gap:
+            1.5%;
+
+        row-gap:
+            0;
+    }
+
+
+    /*
+       Remove o comportamento especial
+       do quinto botão usado no mobile.
+    */
+
+    .faction-button:nth-child(5) {
+        grid-column:
+            auto;
+
+        width:
+            auto;
+
+        justify-self:
+            stretch;
+    }
+
+
+    /*
+       Mantém os ícones próximos do
+       tamanho dos botões da index.
+    */
+
+    .faction-button img {
+        max-width:
+            min(
+                10vw,
+                165px
+            );
+
+        max-height:
+            72%;
+    }
+
+
+    /* -------------------------
+       Voltar ao início
+       ------------------------- */
+
+    .back-button-wrap {
+        top:
+            70%;
+
+        width:
+            min(
+                34vw,
+                430px
+            );
+    }
+
+
+    .action-button {
+        font-size:
+            clamp(
+                10px,
+                0.75vw,
+                14px
+            );
+    }
+
+}
+
+/* #endregion */
+
+
+/* =========================================================
+   DESKTOP COM POUCA ALTURA
+   ========================================================= */
+
+/* #region TELAS BAIXAS */
+
+@media
+    (min-width: 1024px)
+    and (orientation: landscape)
+    and (max-height: 700px) {
+
+    .plate-wrap {
+        top:
+            2.5%;
+    }
+
+
+    .faction-menu {
+        top:
+            49%;
+
+        height:
+            min(
+                32vh,
+                245px
+            );
+    }
+
+
+    .back-button-wrap {
+        top:
+            72%;
+    }
+
+}
+
+/* #endregion */
+
+
+/* =========================================================
+   ACESSIBILIDADE
+   ========================================================= */
+
+/* #region REDUÇÃO DE MOVIMENTO */
+
+@media
+    (prefers-reduced-motion: reduce) {
+
+    .plate-wrap,
+    .footer-note,
+    .action-button {
+        transition-duration:
+            0.01ms !important;
+
+        transition-delay:
+            0ms !important;
+    }
+
+}
+
+/* #endregion */
